@@ -31,3 +31,4 @@ data/
 pyvenv.cfg
 .venv/
 save/
+results/
