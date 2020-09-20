@@ -88,4 +88,7 @@ trainer = Trainer(
 
 trainer.train()
 
+model.save_pretrained('./save/imdb')
+tokenizer.save_pretrained('./save/imdb')
+
 # %%

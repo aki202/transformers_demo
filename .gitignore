@@ -26,11 +26,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-#
 .vscode/
 data/
-bin/
-etc/
-lib/
-share/
 pyvenv.cfg
+.venv/
+save/
