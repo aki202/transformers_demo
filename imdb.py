@@ -69,8 +69,8 @@ from transformers import DistilBertForSequenceClassification, Trainer, TrainingA
 training_args = TrainingArguments(
     output_dir='./results',
     num_train_epochs=3,
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=64,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=32,
     warmup_steps=500,                # number of warmup steps for learning rate scheduler
     weight_decay=0.01,               # strength of weight decay
     logging_dir='./logs',            # directory for storing logs
@@ -90,5 +90,7 @@ trainer.train()
 
 model.save_pretrained('./save/imdb')
 tokenizer.save_pretrained('./save/imdb')
+
+breakpoint()
 
 # %%
