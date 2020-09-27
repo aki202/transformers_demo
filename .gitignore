@@ -32,3 +32,5 @@ pyvenv.cfg
 .venv/
 save/
 results/
+logs/
+wandb/
