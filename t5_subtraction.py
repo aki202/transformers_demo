@@ -18,7 +18,7 @@ y_batch = []
 with open('./data/subtraction_data.txt') as f:
     for line in f:
         x, y = line.strip().split(' ')
-        x_batch.append('calc Number to Number: {} </s>'.format(x))
+        x_batch.append('translante Formula to Answer: {} </s>'.format(x))
         y_batch.append('{} </s>'.format(y))
 
 # %%
@@ -37,12 +37,10 @@ output_ids = output_encoding['input_ids']
 output_attention_mask = output_encoding['attention_mask']
 
 # %%
-optimizer = AdamW(model.parameters(), lr=1e-5)
-
-# %%
 class DataSet(torch.utils.data.Dataset):
-    def __init__(self, X, Y):
+    def __init__(self, X, M, Y):
         self.X = X
+        self.M = M
         self.Y = Y
 
     def __len__(self):
@@ -51,22 +49,23 @@ class DataSet(torch.utils.data.Dataset):
     def __getitem__(self, index):
         return {
             'input_ids': self.X[index],
+            'attention_mask': self.M[index],
             'labels': self.Y[index],
         }
 
-dataset = DataSet(input_ids, output_ids)
+dataset = DataSet(input_ids, output_attention_mask, output_ids)
 
 # %%
 training_args = TrainingArguments(
-    output_dir='./results',          # output directory
-    num_train_epochs=1,              # total number of training epochs
-    logging_dir='./logs',            # directory for storing logs
+    output_dir='./results', # output directory
+    num_train_epochs=1,     # total number of training epochs
+    logging_dir='./logs',   # directory for storing logs
 )
 
 trainer = Trainer(
-    model=model,                         # the instantiated 🤗 Transformers model to be trained
-    args=training_args,                  # training arguments, defined above
-    train_dataset=dataset,         # training dataset
+    model=model,           # the instantiated 🤗 Transformers model to be trained
+    args=training_args,    # training arguments, defined above
+    train_dataset=dataset, # training dataset
 )
 
 # %%
