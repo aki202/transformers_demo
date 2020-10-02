@@ -34,3 +34,4 @@ save/
 results/
 logs/
 wandb/
+lightning_logs/
