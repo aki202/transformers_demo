@@ -35,3 +35,4 @@ results/
 logs/
 wandb/
 lightning_logs/
+nohup.out

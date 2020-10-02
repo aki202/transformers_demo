@@ -119,7 +119,8 @@ class T5FineTuner(pl.LightningModule):
         self.opt = optimizer
         return [optimizer]
 
-    def optimizer_step(self, epoch, batch_idx, optimizer, optimizer_idx, second_order_closure=None):
+    def optimizer_step(self, epoch, batch_idx, optimizer, optimizer_idx,
+        second_order_closure=None, using_native_amp=None):
         if self.trainer.use_tpu:
             xm.optimizer_step(optimizer)
         else:
@@ -192,35 +193,13 @@ args_dict = dict(
     eval_batch_size=8,
     num_train_epochs=2,
     gradient_accumulation_steps=16,
-    n_gpu=0,
+    n_gpu= 1 if torch.cuda.is_available() else 0,
     early_stop_callback=False,
     fp_16=False, # if you want to enable 16-bit training then install apex and set this to true
     opt_level='O1', # you can find out more on optimisation levels here https://nvidia.github.io/apex/amp.html#opt-levels-and-properties
     max_grad_norm=1.0, # if you enable 16-bit training then set this to a sensible value, 0.5 is a good default
     seed=42,
 )
-# %%
-'''
-train_pos_files = glob.glob('data/aclImdb/train/pos/*.txt')
-train_neg_files = glob.glob('data/aclImdb/train/neg/*.txt')
-
-# %%
-len(train_pos_files), len(train_neg_files)
-
-# %%
-random.shuffle(train_pos_files)
-random.shuffle(train_neg_files)
-
-val_pos_files = train_pos_files[:1000]
-val_neg_files = train_neg_files[:1000]
-
-# %%
-import shutil
-for f in val_pos_files:
-  shutil.move(f,  'data/aclImdb/val/pos')
-for f in val_neg_files:
-  shutil.move(f,  'data/aclImdb/val/neg')
-'''
 
 # %%
 tokenizer = T5Tokenizer.from_pretrained('t5-base')
