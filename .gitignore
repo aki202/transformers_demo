@@ -36,3 +36,4 @@ logs/
 wandb/
 lightning_logs/
 nohup.out
+__pycache__
