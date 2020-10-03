@@ -40,7 +40,7 @@ class SubtractionDataset(Dataset):
         elif self.type_path == 'val':
             lines_range = [40000, 50000]
         elif self.type_path == 'mini':
-            lines_range = [0, 5]
+            lines_range = [0, 20]
         else: raise 'Invalid "type_path"'
 
         with open('./data/subtraction_data.txt', 'r') as f:
@@ -59,7 +59,7 @@ class SubtractionDataset(Dataset):
                 )
                 # tokenize targets
                 tokenized_targets = self.tokenizer.batch_encode_plus(
-                    [target], max_length=2, pad_to_max_length=True,
+                    [target], max_length=16, pad_to_max_length=True,
                     return_tensors="pt", truncation=True
                 )
 
@@ -76,14 +76,15 @@ if __name__ == '__main__':
     dataset = SubtractionDataset(tokenizer, type_path='mini')
 # %%
     print('len={}'.format(len(dataset)))
-    data = dataset[4]
+    data = dataset[10]
     print(data)
     for _id in data['source_ids']:
         id = _id.item()
         token = tokenizer.decode(id)
         print('{}({}), '.format(token, id), end='')
+    print('')
     print("'{}'".format(tokenizer.decode(data['source_ids'])))
-    #print(tokenizer.decode(data['target_ids']))
+    print("'{}'".format(tokenizer.decode(data['target_ids'])))
 
 
 # %%
