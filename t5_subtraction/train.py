@@ -2,6 +2,9 @@
 import argparse
 import nltk
 nltk.download('punkt')
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import pytorch_lightning as pl
 from transformers import T5Tokenizer
 
