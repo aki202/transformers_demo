@@ -47,10 +47,10 @@ class SubtractionDataset(Dataset):
             lines = f.readlines()
             for line in lines[lines_range[0]:lines_range[1]]:
                 x, y = line.strip().split(' ')
-                x1, x2 = x.split('-')
-                source = '{} - {} </s>'.format(x1, x2)
-                #source = x  + ' </s>'
-                target = y  + ' </s>'
+                spaced_x = re.sub(r'(.)', r'\1 ', x).strip()
+                spaced_y = re.sub(r'(.)', r'\1 ', y).strip()
+                source = 'calc Formula to Answer: {} </s>'.format(spaced_x)
+                target = spaced_y  + ' </s>'
 
                 # tokenize inputs
                 tokenized_inputs = self.tokenizer.batch_encode_plus(
@@ -63,7 +63,7 @@ class SubtractionDataset(Dataset):
                     return_tensors="pt", truncation=True
                 )
 
-                #print('x:{},\ty:{},\tx1:{},\tx2:{}\t{}\t{}'.format(x, y, x1, x2, source, target))
+                #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
 
                 self.inputs.append(tokenized_inputs)
                 self.targets.append(tokenized_targets)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     dataset = SubtractionDataset(tokenizer, type_path='mini')
 # %%
     print('len={}'.format(len(dataset)))
-    data = dataset[1]
+    data = dataset[4]
     print(data)
     for _id in data['source_ids']:
         id = _id.item()

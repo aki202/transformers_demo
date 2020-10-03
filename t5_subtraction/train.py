@@ -35,7 +35,7 @@ args = argparse.Namespace(**args_dict)
 
 checkpoint_callback = pl.callbacks.ModelCheckpoint(
     filepath=args.output_dir,
-    prefix="checkpoint",
+    prefix="t5_subtraction",
     monitor="val_loss",
     mode="min",
     save_top_k=5
