@@ -29,6 +29,7 @@ args_dict.update({
     'output_dir': 'results/t5_subtraction',
     'num_train_epochs': 1,
     'get_dataset': get_dataset,
+    'max_seq_length': 16,
 })
 args = argparse.Namespace(**args_dict)
 

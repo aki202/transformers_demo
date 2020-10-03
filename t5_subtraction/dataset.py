@@ -39,25 +39,31 @@ class SubtractionDataset(Dataset):
             lines_range = [30000, 40000]
         elif self.type_path == 'val':
             lines_range = [40000, 50000]
+        elif self.type_path == 'mini':
+            lines_range = [0, 5]
         else: raise 'Invalid "type_path"'
 
         with open('./data/subtraction_data.txt', 'r') as f:
             lines = f.readlines()
             for line in lines[lines_range[0]:lines_range[1]]:
                 x, y = line.strip().split(' ')
-                x = x  + ' </s>'
-                y = y  + ' </s>'
+                x1, x2 = x.split('-')
+                source = '{} - {} </s>'.format(x1, x2)
+                #source = x  + ' </s>'
+                target = y  + ' </s>'
 
                 # tokenize inputs
                 tokenized_inputs = self.tokenizer.batch_encode_plus(
-                    [x], max_length=8, pad_to_max_length=True,
+                    [source], max_length=16, pad_to_max_length=True,
                     return_tensors="pt", truncation=True
                 )
                 # tokenize targets
                 tokenized_targets = self.tokenizer.batch_encode_plus(
-                    [y], max_length=5, pad_to_max_length=True,
+                    [target], max_length=2, pad_to_max_length=True,
                     return_tensors="pt", truncation=True
                 )
+
+                #print('x:{},\ty:{},\tx1:{},\tx2:{}\t{}\t{}'.format(x, y, x1, x2, source, target))
 
                 self.inputs.append(tokenized_inputs)
                 self.targets.append(tokenized_targets)
@@ -66,11 +72,18 @@ class SubtractionDataset(Dataset):
 if __name__ == '__main__':
     from transformers import T5Tokenizer
     tokenizer = T5Tokenizer.from_pretrained('t5-base')
-    dataset = SubtractionDataset(tokenizer, type_path='val')
-    print(len(dataset))
-    data = dataset[28]
-    print(tokenizer.decode(data['source_ids']))
-    print(tokenizer.decode(data['target_ids']))
+# %%
+    dataset = SubtractionDataset(tokenizer, type_path='mini')
+# %%
+    print('len={}'.format(len(dataset)))
+    data = dataset[1]
+    print(data)
+    for _id in data['source_ids']:
+        id = _id.item()
+        token = tokenizer.decode(id)
+        print('{}({}), '.format(token, id), end='')
+    print("'{}'".format(tokenizer.decode(data['source_ids'])))
+    #print(tokenizer.decode(data['target_ids']))
 
 
 # %%
