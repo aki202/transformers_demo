@@ -22,8 +22,12 @@ batch = next(it)
 #print(batch)
 for _id in batch['source_ids'][0]:
     id = _id.item()
-    token = tokenizer.convert_ids_to_tokens(id)
-    print('id: {} / {}'.format(id, token))
+    token = tokenizer.decode(id)
+    print('{}'.format(token), end='')
+for _id in batch['target_ids'][0]:
+    id = _id.item()
+    token = tokenizer.decode(id)
+    print('{}'.format(token), end='')
 
 # %%
 batch_source_ids = batch['source_ids'].cuda() if cuda.is_available() else batch['source_ids']
