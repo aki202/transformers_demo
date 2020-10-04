@@ -27,11 +27,11 @@ def get_dataset(tokenizer, type_path, args):
 # %%
 args_dict.update({
     'output_dir': 'results/t5_sql_to_en',
-    'train_batch_size': 8,
-    'eval_batch_size': 8,
+    'train_batch_size': 1,
+    'eval_batch_size': 1,
     'num_train_epochs': 1,
     'get_dataset': get_dataset,
-    'max_seq_length': 512,
+    'max_seq_length': 30,
 })
 args = argparse.Namespace(**args_dict)
 

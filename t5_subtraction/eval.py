@@ -1,4 +1,7 @@
 # %%
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import textwrap
 from torch.utils.data import DataLoader
 from torch import cuda

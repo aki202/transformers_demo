@@ -41,12 +41,12 @@ class SQLDataset(Dataset):
 
             # tokenize inputs
             tokenized_inputs = self.tokenizer.batch_encode_plus(
-                [source], max_length=512, pad_to_max_length=True,
+                [source], max_length=30, padding=True,
                 return_tensors="pt", truncation=True
             )
             # tokenize targets
             tokenized_targets = self.tokenizer.batch_encode_plus(
-                [target], max_length=512, pad_to_max_length=True,
+                [target], max_length=30, padding=True,
                 return_tensors="pt", truncation=True
             )
             #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
