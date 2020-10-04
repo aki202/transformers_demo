@@ -41,11 +41,11 @@ class SQLDataset(Dataset):
 
             # tokenize inputs
             tokenized_inputs = self.tokenizer.batch_encode_plus(
-                [source], padding=True, return_tensors="pt", truncation=False
+                [source], max_length=250, padding=True, return_tensors="pt", truncation=True
             )
             # tokenize targets
             tokenized_targets = self.tokenizer.batch_encode_plus(
-                [target], padding=True, return_tensors="pt", truncation=False
+                [target], max_length=50, padding=True, return_tensors="pt", truncation=True
             )
             #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     from transformers import T5Tokenizer
     tokenizer = T5Tokenizer.from_pretrained('t5-base')
 # %%
-    dataset = SQLDataset(tokenizer, type_path='dev')
+    dataset = SQLDataset(tokenizer, type_path='train')
 # %%
     print('len={}'.format(len(dataset)))
     data = dataset[10]
