@@ -33,11 +33,13 @@ for _id in batch['target_ids'][0]:
     print('{}'.format(token), end='')
 
 # %%
-batch_source_ids = batch['source_ids'].cuda() if cuda.is_available() else batch['source_ids']
-batch_source_mask = batch['source_mask'].cuda() if cuda.is_available() else batch['source_mask']
+
+#batch_source_ids = batch['source_ids'].cuda() if cuda.is_available() else batch['source_ids']
+#batch_source_mask = batch['source_mask'].cuda() if cuda.is_available() else batch['source_mask']
+batch_source_ids = batch['source_ids']
+batch_source_mask = batch['source_mask']
 outs = model.generate(input_ids=batch_source_ids,
-                      attention_mask=batch_source_mask,
-                      max_length=5)
+                      attention_mask=batch_source_mask)
 
 dec = [tokenizer.decode(ids) for ids in outs]
 
