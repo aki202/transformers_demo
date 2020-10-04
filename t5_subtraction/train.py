@@ -29,17 +29,8 @@ args_dict.update({
     'output_dir': 'results/t5_subtraction',
     'num_train_epochs': 1,
     'get_dataset': get_dataset,
-    'max_seq_length': 16,
 })
 args = argparse.Namespace(**args_dict)
-
-checkpoint_callback = pl.callbacks.ModelCheckpoint(
-    filepath=args.output_dir,
-    prefix="t5_subtraction",
-    monitor="val_loss",
-    mode="min",
-    save_top_k=5
-)
 
 train_params = dict(
     accumulate_grad_batches=args.gradient_accumulation_steps,
@@ -49,7 +40,6 @@ train_params = dict(
     precision= 16 if args.fp_16 else 32,
     amp_level=args.opt_level,
     gradient_clip_val=args.max_grad_norm,
-    checkpoint_callback=checkpoint_callback,
 )
 
 # %%

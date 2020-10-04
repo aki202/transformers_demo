@@ -54,13 +54,11 @@ class SubtractionDataset(Dataset):
 
                 # tokenize inputs
                 tokenized_inputs = self.tokenizer.batch_encode_plus(
-                    [source], max_length=16, pad_to_max_length=True,
-                    return_tensors="pt", truncation=True
+                    [source], padding=True, return_tensors="pt", truncation=False
                 )
                 # tokenize targets
                 tokenized_targets = self.tokenizer.batch_encode_plus(
-                    [target], max_length=16, pad_to_max_length=True,
-                    return_tensors="pt", truncation=True
+                    [target], padding=True, return_tensors="pt", truncation=False
                 )
 
                 #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
