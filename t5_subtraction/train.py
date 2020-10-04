@@ -27,6 +27,8 @@ def get_dataset(tokenizer, type_path, args):
 # %%
 args_dict.update({
     'output_dir': 'results/t5_subtraction',
+    'train_batch_size': 8,
+    'eval_batch_size': 8,
     'num_train_epochs': 1,
     'get_dataset': get_dataset,
 })

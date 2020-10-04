@@ -34,11 +34,11 @@ class SubtractionDataset(Dataset):
 
     def _build(self):
         if self.type_path == 'train':
-            lines_range = [0, 30000]
+            lines_range = [0, 39999]
         elif self.type_path == 'test':
-            lines_range = [30000, 40000]
+            lines_range = [40000, 44999]
         elif self.type_path == 'val':
-            lines_range = [40000, 50000]
+            lines_range = [45000, 49999]
         elif self.type_path == 'mini':
             lines_range = [0, 20]
         else: raise 'Invalid "type_path"'
@@ -54,11 +54,13 @@ class SubtractionDataset(Dataset):
 
                 # tokenize inputs
                 tokenized_inputs = self.tokenizer.batch_encode_plus(
-                    [source], padding=True, return_tensors="pt", truncation=False
+                    [source], max_length=18, pad_to_max_length=True,
+                    return_tensors="pt", truncation=True
                 )
                 # tokenize targets
                 tokenized_targets = self.tokenizer.batch_encode_plus(
-                    [target], padding=True, return_tensors="pt", truncation=False
+                    [target], max_length=8, pad_to_max_length=True,
+                    return_tensors="pt", truncation=True
                 )
 
                 #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
@@ -83,6 +85,5 @@ if __name__ == '__main__':
     print('')
     print("'{}'".format(tokenizer.decode(data['source_ids'])))
     print("'{}'".format(tokenizer.decode(data['target_ids'])))
-
 
 # %%
