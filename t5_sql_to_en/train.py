@@ -31,7 +31,6 @@ args_dict.update({
     'eval_batch_size': 1,
     'num_train_epochs': 1,
     'get_dataset': get_dataset,
-    'max_seq_length': 30,
 })
 args = argparse.Namespace(**args_dict)
 

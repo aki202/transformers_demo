@@ -8,7 +8,6 @@ def default_args():
         output_dir="", # path to save the checkpoints
         model_name_or_path='t5-base',
         tokenizer_name_or_path='t5-base',
-        max_seq_length=512,
         learning_rate=3e-4,
         weight_decay=0.0,
         adam_epsilon=1e-8,
