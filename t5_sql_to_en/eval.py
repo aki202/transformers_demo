@@ -15,8 +15,14 @@ from t5_sql_to_en.dataset import SQLDataset
 # %%
 model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en')
 tokenizer = T5Tokenizer.from_pretrained('save/t5_sql_to_en')
-dataset = SQLDataset(tokenizer, type_path='train')
+dataset = SQLDataset(tokenizer, type_path='val')
+
+# %%
 loader = DataLoader(dataset, batch_size=32, shuffle=True)
+
+# %%
+print(dataset[0]['source_ids'].shape)
+print(dataset[1]['source_ids'].shape)
 
 # %%
 it = iter(loader)
@@ -45,8 +51,9 @@ targets = [tokenizer.decode(ids) for ids in batch['target_ids']]
 
 # %%
 for i in range(len(texts)):
-    lines = textwrap.wrap("SQL:\n%s\n" % texts[i], width=100)
-    print("\n".join(lines))
+    lines = textwrap.wrap(texts[i], width=100)
+    sql = '\n'.join(lines).replace('translate SQL to English: ', '')
+    print('SQL: {}'.format(sql))
     print("\nActual: %s" % targets[i])
     print("Predicted: %s" % dec[i])
     print("=====================================================================\n")

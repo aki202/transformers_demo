@@ -41,11 +41,13 @@ class SQLDataset(Dataset):
 
             # tokenize inputs
             tokenized_inputs = self.tokenizer.batch_encode_plus(
-                [source], max_length=250, padding=True, return_tensors="pt", truncation=True
+                [source], max_length=250, padding='max_length', return_tensors="pt",
+                truncation=True
             )
             # tokenize targets
             tokenized_targets = self.tokenizer.batch_encode_plus(
-                [target], max_length=50, padding=True, return_tensors="pt", truncation=True
+                [target], max_length=50, padding='max_length', return_tensors="pt",
+                truncation=True
             )
             #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
 
@@ -68,6 +70,9 @@ if __name__ == '__main__':
     dataset = SQLDataset(tokenizer, type_path='train')
 # %%
     print('len={}'.format(len(dataset)))
+    print(dataset[0]['source_ids'].shape)
+    print(dataset[1]['source_ids'].shape)
+    print(dataset[2]['source_ids'].shape)
     data = dataset[10]
     print(data)
     for _id in data['source_ids']:

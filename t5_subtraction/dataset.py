@@ -54,12 +54,12 @@ class SubtractionDataset(Dataset):
 
                 # tokenize inputs
                 tokenized_inputs = self.tokenizer.batch_encode_plus(
-                    [source], max_length=18, pad_to_max_length=True,
+                    [source], max_length=18, padding='max_length',
                     return_tensors="pt", truncation=True
                 )
                 # tokenize targets
                 tokenized_targets = self.tokenizer.batch_encode_plus(
-                    [target], max_length=8, pad_to_max_length=True,
+                    [target], max_length=8, padding='max_length',
                     return_tensors="pt", truncation=True
                 )
 
@@ -76,6 +76,9 @@ if __name__ == '__main__':
     dataset = SubtractionDataset(tokenizer, type_path='mini')
 # %%
     print('len={}'.format(len(dataset)))
+    print(dataset[0]['source_ids'].shape)
+    print(dataset[1]['source_ids'].shape)
+    print(dataset[2]['source_ids'].shape)
     data = dataset[10]
     print(data)
     for _id in data['source_ids']:
