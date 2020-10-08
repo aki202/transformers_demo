@@ -29,18 +29,10 @@ args_dict.update({
     'output_dir': 'results/t5_sql_to_en',
     'train_batch_size': 1,
     'eval_batch_size': 1,
-    'num_train_epochs': 1,
+    'num_train_epochs': 3,
     'get_dataset': get_dataset,
 })
 args = argparse.Namespace(**args_dict)
-
-checkpoint_callback = pl.callbacks.ModelCheckpoint(
-    filepath=args.output_dir,
-    prefix="t5_sql_to_en",
-    monitor="val_loss",
-    mode="min",
-    save_top_k=5
-)
 
 train_params = dict(
     accumulate_grad_batches=args.gradient_accumulation_steps,
@@ -49,8 +41,7 @@ train_params = dict(
     early_stop_callback=False,
     precision= 16 if args.fp_16 else 32,
     amp_level=args.opt_level,
-    gradient_clip_val=args.max_grad_norm,
-    checkpoint_callback=checkpoint_callback,
+    gradient_clip_val=args.max_grad_norm
 )
 
 # %%

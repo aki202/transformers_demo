@@ -13,8 +13,10 @@ from transformers import (
 from t5_sql_to_en.dataset import SQLDataset
 
 # %%
-model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en')
-tokenizer = T5Tokenizer.from_pretrained('save/t5_sql_to_en')
+#model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en__epoch3')
+model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en__epoch3')
+#tokenizer = T5Tokenizer.from_pretrained('save/t5_sql_to_en__epoch3')
+tokenizer = T5Tokenizer.from_pretrained('t5-base')
 dataset = SQLDataset(tokenizer, type_path='val')
 
 # %%

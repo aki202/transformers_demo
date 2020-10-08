@@ -18,6 +18,7 @@ class T5FineTuner(pl.LightningModule):
         self.model = T5ForConditionalGeneration.from_pretrained(hparams.model_name_or_path)
         self.tokenizer = T5Tokenizer.from_pretrained(hparams.tokenizer_name_or_path)
         self.get_dataset = hparams.get_dataset
+        self.epoch = 0
 
     def is_logger(self):
         return self.trainer.proc_rank <= 0
@@ -56,6 +57,9 @@ class T5FineTuner(pl.LightningModule):
         return {"loss": loss, "log": tensorboard_logs}
 
     def training_epoch_end(self, outputs):
+        self.epoch += 1
+        self.model.save_pretrained('save/t5_sql_to_en__E{}'.format(self.epoch))
+
         avg_train_loss = torch.stack([x["loss"] for x in outputs]).mean()
         tensorboard_logs = { "avg_train_loss": avg_train_loss }
         return {
