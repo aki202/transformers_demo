@@ -48,6 +48,13 @@ scores = {
     'medium': .0,
     'easy': .0,
 }
+counts = {
+    'all': 0,
+    'extra': 0,
+    'hard': 0,
+    'medium': 0,
+    'easy': 0,
+}
 
 # %%
 for batch in loader:
@@ -80,6 +87,8 @@ for batch in loader:
 
         scores['all'] += blue4
         scores[hardness] += blue4
+        counts['all'] += 1
+        counts[hardness] += 1
 
         print('SQL: {}'.format(sql_disp))
         print('hardness: {}'.format(hardness))
@@ -89,12 +98,12 @@ for batch in loader:
         print("=====================================================================\n")
 
 # %%
-print("Total count: {}".format(len(dataset)))
+print("Total count: {}".format(counts['all']))
 for (hardness, score) in scores.items():
-    print("{} BLEU-4: {}".format(hardness, score / len(dataset)))
+    print("{} BLEU-4: {}".format(hardness, score / counts[hardness]))
 
 print('{}\t'.format(params.model), end='')
 for (hardness, score) in scores.items():
-    print('{}\t'.format(score / len(dataset)), end='')
+    print('{}\t'.format(score / counts[hardness]), end='')
 
 # %%
