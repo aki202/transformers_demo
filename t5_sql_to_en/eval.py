@@ -1,4 +1,5 @@
 # %%
+import argparse
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -14,18 +15,22 @@ from t5_sql_to_en.dataset import SQLDataset
 from nltk import bleu_score, word_tokenize
 
 # %%
+parser = argparse.ArgumentParser(description='evaluate sql_to_en model using t5')
+parser.add_argument('-m', '--model', help='model to use', default='t5_sql_to_en__E1')
+params = parser.parse_args()
+
+print('Loading ' + params.model)
+
+# %%
 #model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en__epoch3')
-model = T5ForConditionalGeneration.from_pretrained('save/t5_sql_to_en__E1')
+model = T5ForConditionalGeneration.from_pretrained('save/' + params.model)
 #tokenizer = T5Tokenizer.from_pretrained('save/t5_sql_to_en__epoch3')
 tokenizer = T5Tokenizer.from_pretrained('t5-base')
 dataset = SQLDataset(tokenizer, type_path='val')
 
 # %%
+print('Loading data')
 loader = DataLoader(dataset, batch_size=64, shuffle=True)
-
-# %%
-print(dataset[0]['source_ids'].shape)
-print(dataset[1]['source_ids'].shape)
 
 # %%
 all_blue4 = 0
@@ -61,5 +66,5 @@ for batch in loader:
         print("Blue-4: {}".format(blue4))
         print("=====================================================================\n")
 
-print("Total count: {}".format(len(loader)))
-print("Total Blue-4: {}".format(all_blue4 / len(loader)))
+print("Total count: {}".format(len(dataset)))
+print("Total Blue-4: {}".format(all_blue4 / len(dataset)))
