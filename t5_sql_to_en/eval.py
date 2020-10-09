@@ -33,6 +33,7 @@ all_blue4 = 0
 for batch in loader:
     #batch["source_ids"].shape
     #print(batch)
+    '''
     for _id in batch['source_ids'][0]:
         id = _id.item()
         token = tokenizer.decode(id)
@@ -41,11 +42,12 @@ for batch in loader:
         id = _id.item()
         token = tokenizer.decode(id)
         print('{}'.format(token), end='')
+    '''
 
-    batch_source_ids = batch['source_ids']
-    batch_source_mask = batch['source_mask']
+    batch_source_ids = batch['source_ids'].cuda()
+    batch_source_mask = batch['source_mask'].cuda()
     outs = model.generate(input_ids=batch_source_ids,
-                        attention_mask=batch_source_mask)
+                          attention_mask=batch_source_mask)
 
     dec = [tokenizer.decode(ids) for ids in outs]
 
