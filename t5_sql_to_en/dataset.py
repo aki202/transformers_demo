@@ -12,6 +12,7 @@ class SQLDataset(Dataset):
         self.type_path = type_path
         self.inputs = []
         self.targets = []
+        self.sql_graphs = []
 
         self._build()
 
@@ -29,7 +30,8 @@ class SQLDataset(Dataset):
             "source_ids": source_ids,
             "source_mask": source_mask,
             "target_ids": target_ids,
-            "target_mask": target_mask
+            "target_mask": target_mask,
+            "id": index,
         }
 
     def _build_from_file(self, filename):
@@ -53,6 +55,7 @@ class SQLDataset(Dataset):
 
             self.inputs.append(tokenized_inputs)
             self.targets.append(tokenized_targets)
+            self.sql_graphs.append(datum['sql'])
 
     def _build(self):
         if self.type_path == 'train':
