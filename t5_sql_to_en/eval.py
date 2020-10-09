@@ -21,7 +21,7 @@ tokenizer = T5Tokenizer.from_pretrained('t5-base')
 dataset = SQLDataset(tokenizer, type_path='val')
 
 # %%
-loader = DataLoader(dataset, batch_size=32, shuffle=True)
+loader = DataLoader(dataset, batch_size=64, shuffle=True)
 
 # %%
 print(dataset[0]['source_ids'].shape)
@@ -31,8 +31,15 @@ print(dataset[1]['source_ids'].shape)
 all_blue4 = 0
 
 for batch in loader:
-    outs = model.generate(input_ids=batch['source_ids'].cuda(),
-                          attention_mask=batch['source_mask'].cuda())
+    if cuda.is_available():
+        model.to('cuda')
+        source_ids = batch['source_ids'].cuda()
+        source_mask = batch['source_mask'].cuda()
+    else:
+        source_ids = batch['source_ids']
+        source_mask = batch['source_mask']
+
+    outs = model.generate(input_ids=source_ids, attention_mask=source_mask)
 
     dec = [tokenizer.decode(ids) for ids in outs]
 
@@ -54,4 +61,5 @@ for batch in loader:
         print("Blue-4: {}".format(blue4))
         print("=====================================================================\n")
 
-print("Total Blue-4: {}".format(all_blue4 / len(texts)))
+print("Total count: {}".format(len(loader)))
+print("Total Blue-4: {}".format(all_blue4 / len(loader)))
