@@ -30,8 +30,8 @@ print('')
 
 # %%
 print('Loading model')
-model = T5ForConditionalGeneration.from_pretrained('t5-base')
-#model = T5ForConditionalGeneration.from_pretrained('save/' + params.model)
+#model = T5ForConditionalGeneration.from_pretrained('t5-base')
+model = T5ForConditionalGeneration.from_pretrained('save/' + params.model)
 tokenizer = T5Tokenizer.from_pretrained('t5-base')
 dataset = SQLDataset(tokenizer, type_path='augmentation_all')
 
