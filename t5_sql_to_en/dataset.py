@@ -35,9 +35,9 @@ class SQLDataset(Dataset):
         }
 
     def _build_from_file(self, filename):
-        spider_json = json.load(open('./data/spider/{}.json'.format(filename)))
+        spider_json = json.load(open(filename))
 
-        for datum in spider_json:
+        for datum in spider_json[0:30]:
             source = 'translate SQL to English: {} </s>'.format(datum['query'])
             target = '{} </s>'.format(datum['question'])
 
@@ -59,10 +59,12 @@ class SQLDataset(Dataset):
 
     def _build(self):
         if self.type_path == 'train':
-            self._build_from_file('train_spider')
-            self._build_from_file('train_others')
+            self._build_from_file('./data/spider/train_spider.json')
+            self._build_from_file('./data/spider/train_others.json')
         elif self.type_path == 'val':
-            self._build_from_file('dev')
+            self._build_from_file('./data/spider/dev.json')
+        elif self.type_path == 'augmentation_all':
+            self._build_from_file('./data/spider/aug_all.json')
         else: raise 'Invalid type_path ({})'.format(self.type_path)
 
 # %%
@@ -70,7 +72,7 @@ if __name__ == '__main__':
     from transformers import T5Tokenizer
     tokenizer = T5Tokenizer.from_pretrained('t5-base')
 # %%
-    dataset = SQLDataset(tokenizer, type_path='train')
+    dataset = SQLDataset(tokenizer, type_path='augmentation_all')
 # %%
     print('len={}'.format(len(dataset)))
     print(dataset[0]['source_ids'].shape)
