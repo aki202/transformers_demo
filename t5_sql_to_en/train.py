@@ -18,7 +18,7 @@ set_seed(42)
 args_dict = default_args()
 
 # %%
-tokenizer = T5Tokenizer.from_pretrained(args_dict.tokenizer_name_or_path)
+tokenizer = T5Tokenizer.from_pretrained(args_dict['tokenizer_name_or_path'])
 
 # %%
 def get_dataset(tokenizer, type_path, args):
