@@ -29,7 +29,7 @@ args_dict.update({
     'output_dir': 'results/t5_sql_to_en',
     'train_batch_size': 1,
     'eval_batch_size': 1,
-    'num_train_epochs': 3,
+    'num_train_epochs': 2,
     'get_dataset': get_dataset,
 })
 args = argparse.Namespace(**args_dict)
