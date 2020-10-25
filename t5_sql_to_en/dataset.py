@@ -74,11 +74,13 @@ class SQLDataset(Dataset):
 # %%
 if __name__ == '__main__':
     def show(data):
-        print(data)
+        #print(data)
+        '''
         for _id in data['source_ids']:
             id = _id.item()
             token = tokenizer.decode(id)
             print('{}({}), '.format(token, id), end='')
+        '''
         print('')
         print("'{}'".format(tokenizer.decode(data['source_ids'])))
         print("'{}'".format(tokenizer.decode(data['target_ids'])))
@@ -86,12 +88,13 @@ if __name__ == '__main__':
     from transformers import T5Tokenizer
     tokenizer = T5Tokenizer.from_pretrained('t5-base')
 # %%
-    dataset = SQLDataset(tokenizer, type_path='augmentation_all')
+    #dataset = SQLDataset(tokenizer, type_path='augmentation_all')
+    dataset = SQLDataset(tokenizer, type_path='train')
 # %%
-    print('len={}'.format(len(dataset)))
-    print(dataset[0]['source_ids'].shape)
-    print(dataset[1]['source_ids'].shape)
-    print(dataset[2]['source_ids'].shape)
+    #print('len={}'.format(len(dataset)))
+    #print(dataset[0]['source_ids'].shape)
+    #print(dataset[1]['source_ids'].shape)
+    #print(dataset[2]['source_ids'].shape)
 
 # %%
     show(dataset[0])
@@ -99,4 +102,11 @@ if __name__ == '__main__':
     show(dataset[2])
     show(dataset[3])
     show(dataset[4])
+    show(dataset[5])
+    show(dataset[6])
+    show(dataset[7])
+    show(dataset[8])
+    show(dataset[9])
+    show(dataset[10])
 # %%
+
