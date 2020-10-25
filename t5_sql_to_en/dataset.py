@@ -39,7 +39,7 @@ class SQLDataset(Dataset):
     def _build_from_file(self, filename):
         spider_json = json.load(open(filename))
 
-        for datum in spider_json[0:30]:
+        for datum in spider_json:
             [question, query] = convert_pair(datum['question'], datum['query'])
 
             source = 'translate SQL to English: {} </s>'.format(query)
