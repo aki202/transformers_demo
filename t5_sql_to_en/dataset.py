@@ -1,9 +1,11 @@
 # %%
 import glob
-import os
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import json
 import re
 from torch.utils.data import Dataset
+from t5_sql_to_en.converter import convert_pair
 
 # %%
 class SQLDataset(Dataset):
@@ -38,8 +40,10 @@ class SQLDataset(Dataset):
         spider_json = json.load(open(filename))
 
         for datum in spider_json[0:30]:
-            source = 'translate SQL to English: {} </s>'.format(datum['query'])
-            target = '{} </s>'.format(datum['question'])
+            [question, query] = convert_pair(datum['question'], datum['query'])
+
+            source = 'translate SQL to English: {} </s>'.format(query)
+            target = '{} </s>'.format(question)
 
             # tokenize inputs
             tokenized_inputs = self.tokenizer.batch_encode_plus(
@@ -69,6 +73,16 @@ class SQLDataset(Dataset):
 
 # %%
 if __name__ == '__main__':
+    def show(data):
+        print(data)
+        for _id in data['source_ids']:
+            id = _id.item()
+            token = tokenizer.decode(id)
+            print('{}({}), '.format(token, id), end='')
+        print('')
+        print("'{}'".format(tokenizer.decode(data['source_ids'])))
+        print("'{}'".format(tokenizer.decode(data['target_ids'])))
+
     from transformers import T5Tokenizer
     tokenizer = T5Tokenizer.from_pretrained('t5-base')
 # %%
@@ -78,14 +92,11 @@ if __name__ == '__main__':
     print(dataset[0]['source_ids'].shape)
     print(dataset[1]['source_ids'].shape)
     print(dataset[2]['source_ids'].shape)
-    data = dataset[10]
-    print(data)
-    for _id in data['source_ids']:
-        id = _id.item()
-        token = tokenizer.decode(id)
-        print('{}({}), '.format(token, id), end='')
-    print('')
-    print("'{}'".format(tokenizer.decode(data['source_ids'])))
-    print("'{}'".format(tokenizer.decode(data['target_ids'])))
 
+# %%
+    show(dataset[0])
+    show(dataset[1])
+    show(dataset[2])
+    show(dataset[3])
+    show(dataset[4])
 # %%

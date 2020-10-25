@@ -57,3 +57,16 @@ print(tokenized_targets['input_ids'][0].shape) # (50)
 #print('x:{},\ty:{},\t{}\t{}'.format(x, y, source, target))
 
 # %%
+sql = "SELECT T2.Issue_Date FROM music_festival AS T1 JOIN volume AS T2 ON T1.Volume = T2.Volume_ID  WHERE T1.Volume < 1 AND T2.Issue_Date != \"27 December 1986 - 10 January\" AND T1.Date_of_ceremony != \"18 February 2011\" AND T2.Artist_ID < 1  ORDER BY T1.Music_Festival DESC"
+a = datum_to_pair({
+    'query': sql,
+    'question': ''
+})
+batch_encodes = tokenizer.batch_encode_plus(
+    [a], padding=True, return_tensors="pt", truncation=True
+)
+simple_encode = tokenizer.tokenize(a[0])
+print(batch_encodes['input_ids'][0].shape) # (250)
+print(simple_encode, len(simple_encode))
+
+# %%
