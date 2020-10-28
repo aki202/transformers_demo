@@ -1,28 +1,33 @@
 # %%
-import argparse
-import os
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import textwrap
-from torch.utils.data import DataLoader
-from torch import cuda
+import json
+from spider.process_sql import tokenize
+from spider.evaluation import Evaluator
+from t5_sql_to_en.dataset import SQLDataset
 from transformers import (
     T5ForConditionalGeneration,
     T5Tokenizer
 )
-
-from t5_sql_to_en.dataset import SQLDataset
-from spider.evaluation import Evaluator
+from torch import cuda
+from torch.utils.data import DataLoader
+import textwrap
+import argparse
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # %%
 evaluator = Evaluator()
 
 # %%
-parser = argparse.ArgumentParser(description='evaluate sql_to_en model using t5')
-parser.add_argument('-m', '--model', help='model to use', default='t5_sql_to_en')
+parser = argparse.ArgumentParser(
+    description='evaluate sql_to_en model using t5')
+parser.add_argument('-m', '--model', help='model to use',
+                    default='t5_sql_to_en')
 parser.add_argument('-b', '--batch', help='batch size', type=int, default=64)
-#params = parser.parse_args(args=[])
-params = parser.parse_args()
+if os.environ.get('VSCODE_CLI') == '1':
+    params = parser.parse_args(['--model', 't5_sql_to_en__E2'])
+else:
+    params = parser.parse_args()
 
 print('Model name: {}'.format(params.model))
 print('Batch size: {}'.format(params.batch))
@@ -37,7 +42,7 @@ dataset = SQLDataset(tokenizer, type_path='augmentation_all')
 
 # %%
 print('Loading data')
-loader = DataLoader(dataset, batch_size=params.batch)
+loader = DataLoader(dataset, batch_size=params.batch, shuffle=False)
 
 # %%
 counts = {
@@ -49,6 +54,11 @@ counts = {
 }
 
 # %%
+aug_all_json = json.load(open('data/spider/aug_all.json'))
+
+# %%
+idx = 0
+samples = []
 for batch in loader:
     if cuda.is_available():
         model.to('cuda')
@@ -72,15 +82,28 @@ for batch in loader:
         raw_sql = texts[i].replace('translate SQL to English: ', '')
         sql_disp = '\n'.join(textwrap.wrap(raw_sql, width=100))
 
-        counts['all'] += 1
-        counts[hardness] += 1
+        print(dec[i])
 
-        print('SQL: {}'.format(sql_disp))
+        cataloged = 'NG'
+        if dec[i].endswith(('.', '?')):
+            aug_all_json[idx]['question'] = dec[i]
+            samples.append(aug_all_json[idx])
+            counts['all'] += 1
+            counts[hardness] += 1
+            cataloged = 'OK'
+
+        print('[{}] SQL: {}'.format(idx, sql_disp))
         print('hardness: {}'.format(hardness))
         print("Predicted: %s" % dec[i])
+        print('Cataloged: {}'.format(cataloged))
         print("=====================================================================\n")
+        idx += 1
 
 # %%
 print("Total count: {}".format(counts['all']))
+
+# %%
+with open('data/spider/aug_all_with_q.json', 'w') as f:
+    print(json.dumps(samples, indent=4), file=f)
 
 # %%

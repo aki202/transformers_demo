@@ -1,15 +1,18 @@
 # %%
-import glob
-import os, sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import json
-import re
-from torch.utils.data import Dataset
 from t5_sql_to_en.converter import convert_pair
+from torch.utils.data import Dataset
+import re
+import json
+import glob
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # %%
+
+
 class SQLDataset(Dataset):
-    def __init__(self, tokenizer, type_path = 'train'):
+    def __init__(self, tokenizer, type_path='train'):
         self.tokenizer = tokenizer
         self.type_path = type_path
         self.inputs = []
@@ -25,8 +28,10 @@ class SQLDataset(Dataset):
         source_ids = self.inputs[index]["input_ids"].squeeze()
         target_ids = self.targets[index]["input_ids"].squeeze()
 
-        source_mask = self.inputs[index]["attention_mask"].squeeze() # might need to squeeze
-        target_mask = self.targets[index]["attention_mask"].squeeze() # might need to squeeze
+        # might need to squeeze
+        source_mask = self.inputs[index]["attention_mask"].squeeze()
+        # might need to squeeze
+        target_mask = self.targets[index]["attention_mask"].squeeze()
 
         return {
             "source_ids": source_ids,
@@ -69,12 +74,14 @@ class SQLDataset(Dataset):
             self._build_from_file('./data/spider/dev.json')
         elif self.type_path == 'augmentation_all':
             self._build_from_file('./data/spider/aug_all.json')
-        else: raise 'Invalid type_path ({})'.format(self.type_path)
+        else:
+            raise 'Invalid type_path ({})'.format(self.type_path)
+
 
 # %%
 if __name__ == '__main__':
     def show(data):
-        #print(data)
+        # print(data)
         '''
         for _id in data['source_ids']:
             id = _id.item()
@@ -91,10 +98,10 @@ if __name__ == '__main__':
     #dataset = SQLDataset(tokenizer, type_path='augmentation_all')
     dataset = SQLDataset(tokenizer, type_path='train')
 # %%
-    #print('len={}'.format(len(dataset)))
-    #print(dataset[0]['source_ids'].shape)
-    #print(dataset[1]['source_ids'].shape)
-    #print(dataset[2]['source_ids'].shape)
+    # print('len={}'.format(len(dataset)))
+    # print(dataset[0]['source_ids'].shape)
+    # print(dataset[1]['source_ids'].shape)
+    # print(dataset[2]['source_ids'].shape)
 
 # %%
     show(dataset[0])
@@ -109,4 +116,3 @@ if __name__ == '__main__':
     show(dataset[9])
     show(dataset[10])
 # %%
-
