@@ -1,4 +1,6 @@
 # %%
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import json
 from spider.process_sql import tokenize
 from spider.evaluation import Evaluator
@@ -11,9 +13,7 @@ from torch import cuda
 from torch.utils.data import DataLoader
 import textwrap
 import argparse
-import os
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 
 # %%
 evaluator = Evaluator()
