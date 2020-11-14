@@ -54,7 +54,7 @@ counts = {
 }
 
 # %%
-aug_all_json = json.load(open('data/spider/aug_all.json'))
+aug_all_json = json.load(open('data/spider/raw/tree_trans1.json'))
 
 # %%
 idx = 0
@@ -103,7 +103,7 @@ for batch in loader:
 print("Total count: {}".format(counts['all']))
 
 # %%
-with open('data/spider/aug_all_with_q.json', 'w') as f:
+with open('data/spider/tree_trans1.json', 'w') as f:
     print(json.dumps(samples, indent=4), file=f)
 
 # %%
