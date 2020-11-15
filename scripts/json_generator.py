@@ -1,4 +1,7 @@
 # %%
+'''
+Generate json file with "question" as null
+'''
 from generator.query_alter import QueryAlter
 from generator.generate import Generate
 from generator.sql_parser import SqlParser
