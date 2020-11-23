@@ -6,6 +6,7 @@ import random
 import json
 import sys
 import re
+from pprint import pprint as pp
 
 invalid_queries: [str] = [
     # unknown
@@ -15,11 +16,12 @@ invalid_queries: [str] = [
     'SELECT avg(T1.Age) FROM STUDENT AS T1 JOIN VOTING_RECORD AS T2 ON T1.StuID  =  SECRETARY_Vote WHERE T1.city_code  =  "NYC" AND T2.Election_Cycle  =  "Spring"',
     'SELECT avg(T1.Age) FROM STUDENT AS T1 JOIN VOTING_RECORD AS T2 ON T1.StuID  =  SECRETARY_Vote WHERE T1.Sex  =  "F" AND T2.Election_Cycle  =  "Spring"',
     'SELECT T1.Name ,  T3.Visit_Date FROM Tourist_Attractions AS T1 JOIN VISITORS AS T2 JOIN VISITS AS T3 ON T1.Tourist_Attraction_ID  =  T3.Tourist_Attraction_ID AND T2.Tourist_ID  =  T3.Tourist_ID WHERE T2.Tourist_Details  =  "Vincent" OR T2.Tourist_Details  =  "Vivian"',
-    # inverse T1 <=> T2
+    # duplicated join same tables
     'SELECT T2.first_name , T2.last_name FROM employees AS T1 JOIN employees AS T2 ON T1.id = T2.reports_to WHERE T1.first_name = "Nancy" AND T1.last_name = "Edwards";',
     'SELECT T2.first_name , T2.last_name ,  count(T1.reports_to) FROM employees AS T1 JOIN employees AS T2 ON T1.reports_to = T2.id GROUP BY T1.reports_to ORDER BY count(T1.reports_to) DESC LIMIT 1;',
     'SELECT T2.name ,  T3.name FROM wedding AS T1 JOIN people AS T2 ON T1.male_id  =  T2.people_id JOIN people AS T3 ON T1.female_id  =  T3.people_id WHERE T1.year  >  2014',
     'SELECT T4.name FROM wedding AS T1 JOIN people AS T2 ON T1.male_id  =  T2.people_id JOIN people AS T3 ON T1.female_id  =  T3.people_id JOIN church AS T4 ON T4.church_id  =  T1.church_id WHERE T2.age  >  30 OR T3.age  >  30',
+    # inverse T1 <=> T2
     'SELECT T2.employee_name ,  T3.employee_name FROM Documents_to_be_destroyed AS T1 JOIN Employees AS T2 ON T1.Destruction_Authorised_by_Employee_ID = T2.employee_id JOIN Employees AS T3 ON T1.Destroyed_by_Employee_ID = T3.employee_id;',
     "SELECT DISTINCT T4.name FROM PersonFriend AS T1 JOIN Person AS T2 ON T1.name  =  T2.name JOIN PersonFriend AS T3 ON T1.friend  =  T3.name JOIN PersonFriend AS T4 ON T3.friend  =  T4.name WHERE T2.name  =  'Alice' AND T4.name != 'Alice'",
     # multiple join conditions
@@ -132,12 +134,32 @@ if __name__ == '__main__':
 
     generator = Generate()
 
-    sql_dict = generator.spider_json[6859]
+    sql_dict = generator.spider_json[7]
+    pp(sql_dict['query'])
     db = generator.db_manager.create_db(sql_dict['db_id'])
     parser = SqlParser(sql_dict, db)
 
-    query_alter = QueryAlter(sql_dict)
-    query_alter.alter()
+    query_alter = QueryAlter(parser, db)
+    new_parser = query_alter.alter()
+    print(new_parser)
 
+# %%
+# find index from query
+if __name__ == '__main__':
+    q = 'SELECT born_state FROM head GROUP BY born_state HAVING count(*)  >=  3'
+    generator = Generate()
+    for (idx, js) in enumerate(generator.spider_json):
+        if js['query'] == q:
+            print(idx)
+            print(js)
+            break
+
+# %%
+# check Generator.validate method
+if __name__ == '__main__':
+    generator = Generate()
+    sql_dict = generator.spider_json[7]
+    pp(sql_dict['query'])
+    print(generator.validate(sql_dict))
 
 # %%

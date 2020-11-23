@@ -8,11 +8,8 @@ from spider.parse_sql_one import get_schemas_from_json, Schema
 from spider.process_sql import tokenize, get_sql
 
 # %%
-#jsons = json.load(open('data/spider/train_all_cat_aug.json'))
-#jsons = json.load(open('data/spider/train_all_cat_aug_easy.json'))
-#jsons = json.load(open('data/spider/train_all.json'))
 #jsons = json.load(open('data/spider/aug.json'))
-jsons = json.load(open('data/spider/tree_trans1.json'))
+jsons = json.load(open('data/spider/tree_trans2_easy.json'))
 
 counts = {
     'all': 0,

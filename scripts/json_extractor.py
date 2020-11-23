@@ -6,7 +6,10 @@ from spider.process_sql import tokenize, get_sql
 from spider.parse_sql_one import get_schemas_from_json, Schema
 
 # %%
-jsons = json.load(open('data/spider/tree_trans1.json'))
+base = 'tree_trans2'
+pref_hardness = ['extra']
+
+jsons = json.load(open('data/spider/{}.json'.format(base)))
 
 counts = {
     'all': 0,
@@ -16,18 +19,19 @@ counts = {
     'easy': 0,
 }
 
-pref_hardness = 'extra'
-
 # %%
 new_samples = []
 for (idx, sample) in enumerate(jsons):
     print('[{}] {}'.format(idx, sample['query']))
-    if sample['hardness'] != pref_hardness: continue
+    if sample['hardness'] not in pref_hardness: continue
     counts[sample['hardness']] += 1
     new_samples.append(sample)
 
 # %%
-with open('data/spider/tree_trans1_{}.json'.format(pref_hardness), 'w') as f:
+path = 'data/spider/{}_{}.json'.format(
+    base, '_'.join(pref_hardness)
+)
+with open(path, 'w') as f:
     print(json.dumps(new_samples, indent=4), file=f)
 
 # %%

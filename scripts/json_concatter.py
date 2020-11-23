@@ -5,9 +5,15 @@ Concat two json files into one json file
 from pprint import pprint as pp
 import json
 
+base = 'tree_trans2'
+level = 'extra'
 jsons1 = json.load(open('data/spider/train_all.json'))
-jsons2 = json.load(open('data/spider/tree_trans1.json'))
-output = 'data/spider/train_all_cat_tree_trans1.json'
+jsons2 = json.load(open('data/spider/{}_{}.json'.format(
+    base, level
+)))
+output = 'data/spider/train_all_cat_{}_{}.json'.format(
+    base, level
+)
 
 samples = []
 

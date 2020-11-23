@@ -29,7 +29,7 @@ for sql_dict in generator.spider_json:
     try:
         db: DB = generator.db_manager.create_db(sql_dict['db_id'])
         parser = SqlParser(sql_dict, db)
-        if len(parser.query_parts['group']) > 0: continue
+        #if len(parser.query_parts['group']) > 0: continue
 
         query_alter = QueryAlter(parser, db)
         new_query: str = query_alter.alter()
@@ -60,7 +60,7 @@ for sql_dict in generator.spider_json:
         print('', end='')
 
 print(levels_count)
-with open('/Users/aki202/Dev/research/transformer/data/spider/raw/tree_trans1.json', 'w') as f:
+with open('/Users/aki202/Dev/research/transformer/data/spider/raw/tree_trans2.json', 'w') as f:
     print(json.dumps(samples, indent=4), file=f)
 
 # %%
