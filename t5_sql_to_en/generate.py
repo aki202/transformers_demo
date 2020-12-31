@@ -14,6 +14,12 @@ from torch.utils.data import DataLoader
 import textwrap
 import argparse
 
+max_counts = {
+    'easy': 1989,
+    'medium': 3875,
+    'hard': 1467,
+    'extra': 1328,
+}
 
 # %%
 evaluator = Evaluator()
@@ -86,6 +92,9 @@ for batch in loader:
 
         cataloged = 'NG'
         if dec[i].endswith(('.', '?')):
+            if counts[hardness] > max_counts[hardness]-1:
+                print('Skip: Reached max count ({}, {})'.format(hardness, max_counts[hardness]))
+
             aug_all_json[idx]['question'] = dec[i]
             samples.append(aug_all_json[idx])
             counts['all'] += 1
