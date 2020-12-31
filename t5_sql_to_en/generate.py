@@ -66,6 +66,13 @@ aug_all_json = json.load(open('data/spider/raw/tree_trans1.json'))
 idx = 0
 samples = []
 for batch in loader:
+    # stop if all hardness samples are created
+    if levels_count['easy'] >= max_counts['easy'] and \
+        levels_count['medium'] >= max_counts['medium'] and \
+        levels_count['hard'] >= max_counts['hard'] and \
+        levels_count['extra'] >= max_counts['extra']:
+        break
+
     if cuda.is_available():
         model.to('cuda')
         source_ids = batch['source_ids'].cuda()
