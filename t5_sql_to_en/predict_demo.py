@@ -10,7 +10,6 @@ from transformers import (
     T5Tokenizer
 )
 
-from nltk import bleu_score, word_tokenize
 from pprint import pprint as pp
 
 # %%

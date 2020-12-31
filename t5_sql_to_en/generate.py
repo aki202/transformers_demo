@@ -22,7 +22,7 @@ evaluator = Evaluator()
 parser = argparse.ArgumentParser(
     description='evaluate sql_to_en model using t5')
 parser.add_argument('-m', '--model', help='model to use',
-                    default='t5_sql_to_en')
+                    default='t5_sql_to_en__E2')
 parser.add_argument('-b', '--batch', help='batch size', type=int, default=64)
 if os.environ.get('VSCODE_CLI') == '1':
     params = parser.parse_args(['--model', 't5_sql_to_en__E2'])
@@ -54,7 +54,7 @@ counts = {
 }
 
 # %%
-aug_all_json = json.load(open('data/spider/raw/tree_trans1.json'))
+aug_all_json = json.load(open('data/spider/raw/tree_trans13.json'))
 
 # %%
 idx = 0
@@ -103,7 +103,7 @@ for batch in loader:
 print("Total count: {}".format(counts['all']))
 
 # %%
-with open('data/spider/tree_trans1.json', 'w') as f:
+with open('data/spider/tree_trann13.json', 'w') as f:
     print(json.dumps(samples, indent=4), file=f)
 
 # %%
