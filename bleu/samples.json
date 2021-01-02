@@ -1,0 +1,24 @@
+[
+  {
+    "db_id": "concert_singer",
+    "query": "SELECT count(*) FROM singer",
+    "question": "How many singers are there?",
+    "questions": [
+      "Show the number of all singers?",
+      "What is the number of ingers?",
+      "How many singers do we have?"
+    ],
+    "hardness": ""
+  },
+  {
+    "db_id": "concert_singer",
+    "query": "SELECT count(*) FROM singer",
+    "question": "How many singers are there?",
+    "questions": [
+      "Show the number of all singers?",
+      "What is the number of ingers?",
+      "How many singers do we have?"
+    ],
+    "hardness": ""
+  }
+]

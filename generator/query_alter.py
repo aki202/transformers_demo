@@ -41,7 +41,7 @@ if __name__ == '__main__':
     from pprint import pprint as pp
 
     generator = Generate()
-    idx: int = 6
+    idx: int = 0
     sql_dict = generator.spider_json[idx]
     db = generator.db_manager.create_db(sql_dict['db_id'])
     parser = SqlParser(sql_dict, db)
@@ -58,3 +58,5 @@ if __name__ == '__main__':
     # 5.
 
     # if using group, change grouped column
+
+# %%

@@ -6,7 +6,7 @@ from spider.process_sql import tokenize, get_sql
 from spider.parse_sql_one import get_schemas_from_json, Schema
 
 # %%
-base = 'tree_trans2'
+base = 'tree_trans14'
 pref_hardness = ['extra']
 
 jsons = json.load(open('data/spider/{}.json'.format(base)))
@@ -19,11 +19,19 @@ counts = {
     'easy': 0,
 }
 
+max_counts = {
+    'easy': 1989,
+    'medium': 3875,
+    'hard': 1467,
+    'extra': 1328,
+}
+
 # %%
 new_samples = []
 for (idx, sample) in enumerate(jsons):
     print('[{}] {}'.format(idx, sample['query']))
     if sample['hardness'] not in pref_hardness: continue
+    if counts[sample['hardness']] >= max_counts[sample['hardness']]: continue
     counts[sample['hardness']] += 1
     new_samples.append(sample)
 

@@ -24,7 +24,7 @@ class Where:
         self.value: str = value
 
     def __str__(self):
-        return '{} {} {}'.format(self.column, OPS[self.op], self.value)
+        return '{}, op:{}, val:{}'.format(self.column, OPS[self.op], self.value)
 
 def parse_to_where(raw: str, db: DB, alias_manager: AliasManager) -> Where:
     match: re.Match = pattern.match(raw)
@@ -68,16 +68,16 @@ if __name__ == '__main__':
     am.add(None, 0)
     am.add('T1', 0)
     am.add('T2', 1)
-    #print(parse_to_where('T2.age <= 40', db, am))
-    #print(parse_to_where('T1.id between 10 and 20', db, am))
-    #print(parse_to_where('T1.id = 10', db, am))
-    #print(parse_to_where('T1.id != 10', db, am))
-    #print(parse_to_where('T1.id > 10', db, am))
-    #print(parse_to_where('T1.id < 10', db, am))
-    #print(parse_to_where('T1.id >= 10', db, am))
-    #print(parse_to_where('T1.id <= 10', db, am))
-    #print(parse_to_where('T1.id IN (SELECT id FROM users)', db, am))
-    #print(parse_to_where('T1.id NOT IN (SELECT id FROM users)', db, am))
+    print(parse_to_where('T2.age <= 40', db, am))
+    print(parse_to_where('T1.id between 10 and 20', db, am))
+    print(parse_to_where('T1.id = 10', db, am))
+    print(parse_to_where('T1.id != 10', db, am))
+    print(parse_to_where('T1.id > 10', db, am))
+    print(parse_to_where('T1.id < 10', db, am))
+    print(parse_to_where('T1.id >= 10', db, am))
+    print(parse_to_where('T1.id <= 10', db, am))
+    print(parse_to_where('T1.id IN (SELECT id FROM users)', db, am))
+    print(parse_to_where('T1.id NOT IN (SELECT id FROM users)', db, am))
 
 # %%
 

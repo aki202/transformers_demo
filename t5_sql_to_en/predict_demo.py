@@ -1,5 +1,6 @@
 # %%
 from flask import Flask, request, redirect, url_for, abort, jsonify
+from flask_cors import CORS
 
 import argparse
 import textwrap
@@ -10,7 +11,6 @@ from transformers import (
     T5Tokenizer
 )
 
-from nltk import bleu_score, word_tokenize
 from pprint import pprint as pp
 
 # %%
@@ -30,7 +30,7 @@ tokenizer = T5Tokenizer.from_pretrained('t5-base')
 # %%
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["POST"])
 def receive():
     query = request.json['query']
 
@@ -52,5 +52,12 @@ def receive():
     dec = [tokenizer.decode(ids) for ids in outs]
     return jsonify({"language": "python", 'res': dec[0]})
 
+@app.route("/", methods=["OPTIONS"])
+def option():
+    resp = flask.Response('OK')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 # %%
+CORS(app)
 app.run()

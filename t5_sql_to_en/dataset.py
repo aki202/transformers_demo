@@ -12,9 +12,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 
 class SQLDataset(Dataset):
-    def __init__(self, tokenizer, type_path='train'):
+    def __init__(self, tokenizer, type_path='train', filename=None):
         self.tokenizer = tokenizer
         self.type_path = type_path
+        self.filename = filename
         self.inputs = []
         self.targets = []
         self.sql_graphs = []
@@ -73,7 +74,7 @@ class SQLDataset(Dataset):
         elif self.type_path == 'val':
             self._build_from_file('./data/spider/dev.json')
         elif self.type_path == 'augmentation_all':
-            self._build_from_file('./data/spider/raw/tree_trans1.json')
+            self._build_from_file('./data/spider/raw/{}'.format(self.filename))
         else:
             raise 'Invalid type_path ({})'.format(self.type_path)
 

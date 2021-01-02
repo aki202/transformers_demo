@@ -8,6 +8,9 @@
 - [ ] having
 - [ ] order
 - [ ] limit
+- [ ] union
+- [ ] except
+- [ ] intersect
 '''
 
 import json
@@ -203,6 +206,20 @@ class SqlParser:
             wheare = parse_to_where(where_raw.strip(), self.db, self.alias_manager)
             self.wheres.append(wheare)
 
+    def condition_values(self) -> [str]:
+        values: [any] = []
+
+        for w in re.findall(r'"(.+?)"', self.query_parts['where'], re.IGNORECASE):
+            values.append(w)
+
+        for w in re.findall(r"'(.+?)'", self.query_parts['where'], re.IGNORECASE):
+            values.append(w)
+
+        for w in re.findall(r' (\d{2,}?)', self.query_parts['where'], re.IGNORECASE):
+            values.append(w)
+
+        return values
+
     '''
     def available_table_names(self):
         tables: [str] = [self.from_table.name]
@@ -217,12 +234,13 @@ class SqlParser:
 # %%
 if __name__ == '__main__':
     train_spider_json = json.load(open('data/spider/train_spider.json'))
-    sql_dict = train_spider_json[13]
+    sql_dict = train_spider_json[520]
     db_manager = DBManager('data/spider/tables.json')
     db = db_manager.create_db(sql_dict['db_id'])
     parser = SqlParser(sql_dict, db)
     print(parser)
     print(parser.to_query())
+    print(parser.condition_values())
 
 # %%
 

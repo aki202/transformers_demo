@@ -83,8 +83,8 @@ def parse_to_select_column(raw: str, db: DB, alias_manager: AliasManager) -> Sel
         table_id = db.table_id_by_alias(alias, alias_manager)
         column = db.column(col_name, table_id, alias_manager)
     except Exception as e:
-        print('not found col_name {}(table_idx={}, alias={})'.format(col_name, table_id, alias))
-        for col in db.columns: print(col)
+        #print('not found col_name {}(table_idx={}, alias={})'.format(col_name, table_id, alias))
+        #for col in db.columns: print(col)
         raise e
 
     # create SelectColumn

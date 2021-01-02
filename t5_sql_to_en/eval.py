@@ -1,5 +1,6 @@
 # %%
 import argparse
+import json
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -22,7 +23,7 @@ evaluator = Evaluator()
 
 # %%
 parser = argparse.ArgumentParser(description='evaluate sql_to_en model using t5')
-parser.add_argument('-m', '--model', help='model to use', default='t5_sql_to_en__E1')
+parser.add_argument('-m', '--model', help='model to use', default='t5_sql_to_en__E2')
 parser.add_argument('-b', '--batch', help='batch size', type=int, default=64)
 #params = parser.parse_args(args=[])
 params = parser.parse_args()
@@ -60,6 +61,8 @@ counts = {
 }
 
 # %%
+results: [{str: str}] = []
+
 for batch in loader:
     if cuda.is_available():
         model.to('cuda')
@@ -100,6 +103,12 @@ for batch in loader:
         print("Blue-4: {}".format(blue4))
         print("=====================================================================\n")
 
+        results.append({
+            'query': raw_sql,
+            'question': dec[i],
+            'hardness': hardness,
+        })
+
 # %%
 print("Total count: {}".format(counts['all']))
 for (hardness, score) in scores.items():
@@ -108,5 +117,8 @@ for (hardness, score) in scores.items():
 print('{}\t'.format(params.model), end='')
 for (hardness, score) in scores.items():
     print('{}\t'.format(score / counts[hardness]), end='')
+
+with open('results/t5_sql_to_text.json', 'w') as f:
+    print(json.dumps(results, indent=4), file=f)
 
 # %%

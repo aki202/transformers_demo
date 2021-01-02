@@ -14,27 +14,20 @@ from torch.utils.data import DataLoader
 import textwrap
 import argparse
 
-max_counts = {
-    'easy': 1989,
-    'medium': 3875,
-    'hard': 1467,
-    'extra': 1328,
-}
-
 # %%
 evaluator = Evaluator()
+parser = argparse.ArgumentParser(description='evaluate sql_to_en model using t5')
+
+parser.add_argument('filename')
+parser.add_argument('-m', '--model', help='model to use', default='t5_sql_to_en__E2')
+parser.add_argument('-b', '--batch', help='batch size', type=int, default=64)
 
 # %%
-parser = argparse.ArgumentParser(
-    description='evaluate sql_to_en model using t5')
-parser.add_argument('-m', '--model', help='model to use',
-                    default='t5_sql_to_en')
-parser.add_argument('-b', '--batch', help='batch size', type=int, default=64)
-if os.environ.get('VSCODE_CLI') == '1':
-    params = parser.parse_args(['--model', 't5_sql_to_en__E2'])
-else:
-    params = parser.parse_args()
+params = parser.parse_args()
 
+#print(os.environ.items)
+
+print('filename: {}'.format(params.filename))
 print('Model name: {}'.format(params.model))
 print('Batch size: {}'.format(params.batch))
 print('')
@@ -44,7 +37,7 @@ print('Loading model')
 #model = T5ForConditionalGeneration.from_pretrained('t5-base')
 model = T5ForConditionalGeneration.from_pretrained('save/' + params.model)
 tokenizer = T5Tokenizer.from_pretrained('t5-base')
-dataset = SQLDataset(tokenizer, type_path='augmentation_all')
+dataset = SQLDataset(tokenizer, type_path='augmentation_all', filename=params.filename)
 
 # %%
 print('Loading data')
@@ -60,19 +53,14 @@ counts = {
 }
 
 # %%
-aug_all_json = json.load(open('data/spider/raw/tree_trans1.json'))
+aug_all_json = json.load(open('data/spider/raw/{}'.format(params.filename)))
+
+# %%
 
 # %%
 idx = 0
 samples = []
 for batch in loader:
-    # stop if all hardness samples are created
-    if levels_count['easy'] >= max_counts['easy'] and \
-        levels_count['medium'] >= max_counts['medium'] and \
-        levels_count['hard'] >= max_counts['hard'] and \
-        levels_count['extra'] >= max_counts['extra']:
-        break
-
     if cuda.is_available():
         model.to('cuda')
         source_ids = batch['source_ids'].cuda()
@@ -95,13 +83,8 @@ for batch in loader:
         raw_sql = texts[i].replace('translate SQL to English: ', '')
         sql_disp = '\n'.join(textwrap.wrap(raw_sql, width=100))
 
-        print(dec[i])
-
         cataloged = 'NG'
         if dec[i].endswith(('.', '?')):
-            if counts[hardness] > max_counts[hardness]-1:
-                print('Skip: Reached max count ({}, {})'.format(hardness, max_counts[hardness]))
-
             aug_all_json[idx]['question'] = dec[i]
             samples.append(aug_all_json[idx])
             counts['all'] += 1
@@ -119,7 +102,7 @@ for batch in loader:
 print("Total count: {}".format(counts['all']))
 
 # %%
-with open('data/spider/tree_trans1.json', 'w') as f:
+with open('data/spider/{}'.format(params.filename), 'w') as f:
     print(json.dumps(samples, indent=4), file=f)
 
 # %%

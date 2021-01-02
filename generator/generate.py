@@ -59,6 +59,8 @@ class Generate:
         self.generate_one_by_sql_dict(sql_dict)
 
     def validate(self, sql_dict: dict):
+        raise 'validate!!! in generator/generate.py'
+
         tokens: [str] = [tok.lower() for tok in sql_dict['query_toks']]
         invalids: [str] = ['intersect', 'union', 'except']
         invalid_dbs: [str] = ['assets_maintenance']
