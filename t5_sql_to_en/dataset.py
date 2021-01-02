@@ -74,11 +74,7 @@ class SQLDataset(Dataset):
         elif self.type_path == 'val':
             self._build_from_file('./data/spider/dev.json')
         elif self.type_path == 'augmentation_all':
-<<<<<<< HEAD
             self._build_from_file('./data/spider/raw/{}'.format(self.filename))
-=======
-            self._build_from_file('./data/spider/raw/tree_trans13.json')
->>>>>>> 6be0368c9483cc7490b891fc9d09739e939c3c57
         else:
             raise 'Invalid type_path ({})'.format(self.type_path)
 
