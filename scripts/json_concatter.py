@@ -6,11 +6,8 @@ from pprint import pprint as pp
 import json
 
 jsons1 = json.load(open('data/spider/train_all.json'))
-jsons2 = json.load(open('data/spider/tree_trans14_extra.json'))
-output = 'data/spider/train_all_cat_tree_trans14_extra.json'
-
-#jsons2 = json.load(open('data/spider/{}.json'.format(base)))
-#output = 'data/spider/train_all_cat_{}.json'.format(base)
+jsons2 = json.load(open('data/spider/tree_trans15_sim10.json'))
+output = 'data/spider/train_all_cat_tree_trans15_sim10.json'
 
 samples = []
 

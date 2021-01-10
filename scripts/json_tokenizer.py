@@ -4,12 +4,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import json
 from spider.process_sql import tokenize, get_sql
 from spider.parse_sql_one import get_schemas_from_json, Schema
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('json_name', type=str)
+args = parser.parse_args()
 
 # %%
 schemas, db_names, tables = get_schemas_from_json('data/spider/tables.json')
 
 # %%
-jsons = json.load(open('data/spider/tree_trans13.json'))
+jsons = json.load(open('data/spider/raw/{}'.format(args.json_name)))
 
 counts = {
     'all': 0,
@@ -40,7 +45,7 @@ for (idx, sample) in enumerate(jsons):
         print(e)
 
 # %%
-with open('data/spider/tree_trans13.json', 'w') as f:
+with open('data/spider/{}'.format(args.json_name), 'w') as f:
     print(json.dumps(new_samples, indent=4), file=f)
 
 # %%

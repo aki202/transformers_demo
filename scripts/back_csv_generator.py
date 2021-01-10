@@ -11,7 +11,7 @@ import copy
 
 lstm_json = json.load(open('results/lstm_sql_to_text.json'))
 t5_json = json.load(open('results/t5_sql_to_text.json'))
-output = 'results/back_trans_comparison.csv'
+# output = 'results/back_trans_comparison_v2.csv'
 
 def key(s: str) -> str:
     return re.sub(r'[^a-z\d]', '', s.lower())

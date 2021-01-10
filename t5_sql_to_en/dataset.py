@@ -69,8 +69,9 @@ class SQLDataset(Dataset):
 
     def _build(self):
         if self.type_path == 'train':
-            self._build_from_file('./data/spider/train_spider.json')
-            self._build_from_file('./data/spider/train_others.json')
+            #self._build_from_file('./data/spider/train_spider.json')
+            #self._build_from_file('./data/spider/train_others.json')
+            self._build_from_file('./data/spider/train_all_ratio08.json')
         elif self.type_path == 'val':
             self._build_from_file('./data/spider/dev.json')
         elif self.type_path == 'augmentation_all':

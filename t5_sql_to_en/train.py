@@ -26,7 +26,7 @@ def get_dataset(tokenizer, type_path, args):
 
 # %%
 args_dict.update({
-    'output_dir': 'results/t5_sql_to_en',
+    'output_dir': 'results/t5_sql_to_en_ratio08',
     'train_batch_size': 1,
     'eval_batch_size': 1,
     'num_train_epochs': 2,

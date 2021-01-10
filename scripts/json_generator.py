@@ -15,6 +15,11 @@ from spider.evaluation import Evaluator
 from transformers import T5Tokenizer
 import json
 tokenizer = T5Tokenizer.from_pretrained('t5-base')
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('dst_json', type=str)
+args = parser.parse_args()
 
 max_counts = {
     'easy': 1989*5,
@@ -85,7 +90,7 @@ while True:
     break
 
 print(levels_count)
-with open('/Users/aki202/Dev/research/transformer/data/spider/raw/tree_trans15.json', 'w') as f:
+with open('/Users/aki202/Dev/research/transformer/{}'.format(args.dst_json), 'w') as f:
     print(json.dumps(samples, indent=4), file=f)
 
 # %%
